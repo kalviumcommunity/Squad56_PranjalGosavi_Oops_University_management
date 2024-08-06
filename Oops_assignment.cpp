@@ -4,6 +4,7 @@
 using namespace std;
 
 const int MAX_COURSE = 10;
+
 const int MAX_STUDENT = 10;
 
 
@@ -26,6 +27,7 @@ public:
             courseCount++;
         }
         else{
+            
             cout<<"Cannot enroll in more courses. Maximum limit reached"<<endl;
         }
 
