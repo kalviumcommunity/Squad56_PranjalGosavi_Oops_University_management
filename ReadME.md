@@ -1,15 +1,15 @@
-# University Management System
-## Overview
+## University Management System
+Overview
 The University Management System is a simple console-based application written in C++ that demonstrates the use of Object-Oriented Programming (OOP) principles. The system allows for the management of student enrollments and course assignments. It includes features for creating student profiles, enrolling students in courses, and managing course information.
 
-* Features
+Features
 Student Management:
 
 Create a student profile with name, age, and student ID.
 Enroll students in multiple courses.
 Display student information, including enrolled courses.
 
-* Course Management:
+Course Management:
 
 Create a course with a course name and code.
 Add students to the course.
@@ -60,14 +60,14 @@ After compiling, run the executable:
 Copy code
 ./UniversityManagementSystem
 
-## Input Data:
+Input Data:
 
 The program will prompt you to enter student and course information. Follow the on-screen prompts to input data.
 Enter the student's name, age, ID, and the number of courses they are enrolling in.
 Enter course names as required.
 Enter the course's name and code, then specify the number of students and their IDs.
 
-## Display Information:
+Display Information:
 
 The program will display the entered information, including details of students and courses.
 Limitations
@@ -76,7 +76,7 @@ The current implementation does not include data persistence; data is lost when 
 Error handling is basic and does not cover all edge cases.
 
 
-## Future Improvements
+Future Improvements
 Implement data persistence using file handling or a database.
 Improve the user interface and error handling.
 Expand the system to include additional features, such as a professor management module or more detailed course descriptions.
