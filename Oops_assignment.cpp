@@ -27,7 +27,7 @@ public:
             courseCount++;
         }
         else{
-            
+
             cout<<"Cannot enroll in more courses. Maximum limit reached"<<endl;
         }
 
@@ -48,8 +48,6 @@ public:
 
 class Course{
 private:
-
-    
     string courseName;
     string courseCode;
     string enrolledStudents[MAX_STUDENT];
