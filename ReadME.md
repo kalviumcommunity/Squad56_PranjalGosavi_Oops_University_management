@@ -1,8 +1,8 @@
-## University Management System
-Overview
+# University Management System 🏫
+## Overview
 The University Management System is a simple console-based application written in C++ that demonstrates the use of Object-Oriented Programming (OOP) principles. The system allows for the management of student enrollments and course assignments. It includes features for creating student profiles, enrolling students in courses, and managing course information.
 
-Features
+## Features ✏️
 Student Management:
 
 Create a student profile with name, age, and student ID.
@@ -26,11 +26,11 @@ Student (Derived Class from Person)
 
 Manages student-specific information and operations.
 
-Data Members:
+* Data Members:
 string enrolledCourses[MAX_COURSES]: Array to store courses the student is enrolled in.
 int courseCount: Counter to keep track of the number of enrolled courses.
 
-Member Functions:
+* Member Functions:
 enrollCourse(const string& course): Enrolls the student in a course.
 displayInfo() const: Displays student information.
 Course
@@ -45,7 +45,7 @@ Member Functions:
 addStudent(const string& studentID): Adds a student to the course.
 displayInfo() const: Displays course information.
 
-## Usage
+## Usage 
 Compile the Program:
 To compile the program, use a C++ compiler like g++. In the command line, navigate to the directory containing the source code and run:
 
@@ -54,20 +54,20 @@ Copy code
 g++ -o UniversityManagementSystem main.cpp
 Replace main.cpp with the name of your C++ source file if it's different.
 
-Run the Program:
+* Run the Program:
 After compiling, run the executable:
 
 Copy code
 ./UniversityManagementSystem
 
-Input Data:
+* Input Data:
 
 The program will prompt you to enter student and course information. Follow the on-screen prompts to input data.
 Enter the student's name, age, ID, and the number of courses they are enrolling in.
 Enter course names as required.
 Enter the course's name and code, then specify the number of students and their IDs.
 
-Display Information:
+* Display Information:
 
 The program will display the entered information, including details of students and courses.
 Limitations
@@ -76,7 +76,7 @@ The current implementation does not include data persistence; data is lost when 
 Error handling is basic and does not cover all edge cases.
 
 
-Future Improvements
+## Future Improvements🌟
 Implement data persistence using file handling or a database.
 Improve the user interface and error handling.
 Expand the system to include additional features, such as a professor management module or more detailed course descriptions.
