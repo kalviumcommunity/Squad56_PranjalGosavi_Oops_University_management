@@ -1,7 +1,7 @@
 # University Management System 🏫
 ## Overview
 The University Management System is a simple console-based application written in C++ that demonstrates the use of Object-Oriented Programming (OOP) principles. The system allows for the management of student enrollments and course assignments. It includes features for creating student profiles, enrolling students in courses, and managing course information.
-
+---
 ## Features ✏️
 Student Management:
 
@@ -44,7 +44,7 @@ int studentCount: Counter to keep track of the number of enrolled students.
 Member Functions:
 addStudent(const string& studentID): Adds a student to the course.
 displayInfo() const: Displays course information.
-
+---
 ## Usage 
 Compile the Program:
 To compile the program, use a C++ compiler like g++. In the command line, navigate to the directory containing the source code and run:
