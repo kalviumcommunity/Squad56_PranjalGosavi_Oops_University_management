@@ -12,13 +12,20 @@ private:
     string name;
     int age;
     string studentID;
-    string enrolledCourses[MAX_COURSES];
+    string* enrolledCourses;  // Dynamically allocated array
     int courseCount;
 
 public:
     // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
-        : name(name), age(age), studentID(studentID), courseCount(0) {}
+        : name(name), age(age), studentID(studentID), courseCount(0) {
+        enrolledCourses = new string[MAX_COURSES];  // Allocate memory dynamically
+    }
+
+    // Destructor to free allocated memory
+    ~Student() {
+        delete[] enrolledCourses;  // Free the allocated memory
+    }
 
     // Function to enroll in a course
     void enrollCourse(const string& course) {
@@ -51,13 +58,20 @@ class Course {
 private:
     string courseName;
     string courseCode;
-    string enrolledStudents[MAX_STUDENTS];
+    string* enrolledStudents;  // Dynamically allocated array
     int studentCount;
 
 public:
     // Constructor
     Course(const string& courseName = "", const string& courseCode = "")
-        : courseName(courseName), courseCode(courseCode), studentCount(0) {}
+        : courseName(courseName), courseCode(courseCode), studentCount(0) {
+        enrolledStudents = new string[MAX_STUDENTS];  // Allocate memory dynamically
+    }
+
+    // Destructor to free allocated memory
+    ~Course() {
+        delete[] enrolledStudents;  // Free the allocated memory
+    }
 
     // Function to add a student to the course
     void addStudent(const string& studentID) {
@@ -86,10 +100,9 @@ public:
 
 // Main function
 int main() {
-    // Array of Student objects
-    Student students[MAX_STUDENTS];
-    // Array of Course objects
-    Course courses[MAX_COURSES];
+    // Dynamically allocate arrays of Student and Course objects
+    Student* students[MAX_STUDENTS];
+    Course* courses[MAX_COURSES];
 
     int studentCount = 0;  // Counter for the number of students
     int courseCount = 0;   // Counter for the number of courses
@@ -106,21 +119,19 @@ int main() {
     cin.ignore(); // To ignore the newline character left in the input buffer
 
     // Create a new Student object and store it in the students array
-    students[studentCount++] = Student(studentName, studentAge, studentID);
+    students[studentCount++] = new Student(studentName, studentAge, studentID);
 
     cout << "Enter number of courses to enroll: ";
     cin >> numCourses;
-    cin.ignore(); // To ignore the newline character left in the input buffer
+    cin.ignore();
     for (int i = 0; i < numCourses && i < MAX_COURSES; i++) {
         string course;
         cout << "Enter course " << i + 1 << ": ";
         getline(cin, course);
-        // Enroll the first student in the specified courses
-        students[0].enrollCourse(course);
+        students[0]->enrollCourse(course);
     }
 
-    // Display student information
-    students[0].displayInfo();
+    students[0]->displayInfo();
 
     // Input for Course
     string courseName, courseCode;
@@ -132,7 +143,7 @@ int main() {
     cin.ignore(); // To ignore the newline character left in the input buffer
 
     // Create a new Course object and store it in the courses array
-    courses[courseCount++] = Course(courseName, courseCode);
+    courses[courseCount++] = new Course(courseName, courseCode);
 
     cout << "Enter number of students to add to the course: ";
     cin >> numStudents;
@@ -142,11 +153,20 @@ int main() {
         cout << "Enter student ID " << i + 1 << ": ";
         getline(cin, studentID);
         // Add students to the first course for simplicity
-        courses[0].addStudent(studentID);
+        courses[0]->addStudent(studentID);
     }
 
     // Display course information
-    courses[0].displayInfo();
+    courses[0]->displayInfo();
+
+    // Deallocate memory
+    for (int i = 0; i < studentCount; i++) {
+        delete students[i];
+    }
+
+    for (int i = 0; i < courseCount; i++) {
+        delete courses[i];
+    }
 
     return 0;
 }
