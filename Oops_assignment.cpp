@@ -71,23 +71,21 @@ private:
     string courseCode;
     string* enrolledStudents;  
     int studentCount;
-    static int totalCourses;  // Static variable to count total courses
+    static int totalCourses;  
 
 public:
-    // Constructor
     Course(const string& courseName = "", const string& courseCode = "")
         : courseName(courseName), courseCode(courseCode), studentCount(0) {
         enrolledStudents = new string[MAX_STUDENTS]; 
-        totalCourses++;  // Increment total courses count
+        totalCourses++;  
     }
 
-    // Destructor to free allocated memory
     ~Course() {
         delete[] enrolledStudents;  
-        totalCourses--;  // Decrement total courses count
+        totalCourses--;  
     }
 
-    // Function to add a student to the course
+   
     void addStudent(const string& studentID) {
         if (studentCount < MAX_STUDENTS) {
             enrolledStudents[studentCount] = studentID;
@@ -97,7 +95,7 @@ public:
         }
     }
 
-    // Function to display course information
+    
     void displayInfo() const {
         cout << "Course Name: " << courseName << ", Course Code: " << courseCode << endl;
         cout << "Enrolled Students: ";
@@ -107,16 +105,20 @@ public:
         cout << endl;
     }
 
+
+
     static int getTotalCourses() {  // Static function to return total courses
         return totalCourses;
     }
+
+
 
     string getCourseCode() const {
         return courseCode;
     }
 };
 
-// Initialize static variable for Course class
+
 int Course::totalCourses = 0;
 
 
@@ -128,7 +130,7 @@ int main() {
     int studentCount = 0;  
     int courseCount = 0;   
 
-    // Input for Student
+ 
     string studentName, studentID;
     int studentAge, numCourses;
     cout << "Enter student name: ";
@@ -139,7 +141,6 @@ int main() {
     cin >> studentID;
     cin.ignore(); 
 
-    // Create a new Student object and store it in the students array
     students[studentCount++] = new Student(studentName, studentAge, studentID);
 
     cout << "Enter number of courses to enroll: ";
@@ -154,7 +155,7 @@ int main() {
 
     students[0]->displayInfo();
 
-    // Input for Course
+   
     string courseName, courseCode;
     int numStudents;
     cout << "Enter course name: ";
@@ -163,7 +164,6 @@ int main() {
     cin >> courseCode;
     cin.ignore(); 
 
-    // Create a new Course object and store it in the courses array
     courses[courseCount++] = new Course(courseName, courseCode);
 
     cout << "Enter number of students to add to the course: ";
@@ -173,18 +173,17 @@ int main() {
         string studentID;
         cout << "Enter student ID " << i + 1 << ": ";
         getline(cin, studentID);
-        // Add students to the first course for simplicity
         courses[0]->addStudent(studentID);
     }
 
-    // Display course information
+    
     courses[0]->displayInfo();
 
-    // Display total students and total courses
+    
     cout << "Total number of students: " << Student::getTotalStudents() << endl;
     cout << "Total number of courses: " << Course::getTotalCourses() << endl;
 
-    // Deallocate memory
+ 
     for (int i = 0; i < studentCount; i++) {
         delete students[i];
     }
