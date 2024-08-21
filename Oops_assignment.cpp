@@ -14,17 +14,20 @@ private:
     string studentID;
     string* enrolledCourses;  
     int courseCount;
+    static int totalStudents;  // Static variable to count total students
 
 public:
     // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
         : name(name), age(age), studentID(studentID), courseCount(0) {
         enrolledCourses = new string[MAX_COURSES];  
+        totalStudents++;  // Increment total students count
     }
 
     // Destructor to free allocated memory
     ~Student() {
         delete[] enrolledCourses;  
+        totalStudents--;  // Decrement total students count
     }
 
     // Function to enroll in a course
@@ -48,10 +51,18 @@ public:
         cout << endl;
     }
 
+    static int getTotalStudents() {  // Static function to return total students
+        return totalStudents;
+    }
+
     string getStudentID() const {
         return studentID;
     }
 };
+
+// Initialize static variable for Student class
+int Student::totalStudents = 0;
+
 
 // Class: Course
 class Course {
@@ -60,17 +71,20 @@ private:
     string courseCode;
     string* enrolledStudents;  
     int studentCount;
+    static int totalCourses;  // Static variable to count total courses
 
 public:
     // Constructor
     Course(const string& courseName = "", const string& courseCode = "")
         : courseName(courseName), courseCode(courseCode), studentCount(0) {
         enrolledStudents = new string[MAX_STUDENTS]; 
+        totalCourses++;  // Increment total courses count
     }
 
     // Destructor to free allocated memory
     ~Course() {
         delete[] enrolledStudents;  
+        totalCourses--;  // Decrement total courses count
     }
 
     // Function to add a student to the course
@@ -93,10 +107,17 @@ public:
         cout << endl;
     }
 
+    static int getTotalCourses() {  // Static function to return total courses
+        return totalCourses;
+    }
+
     string getCourseCode() const {
         return courseCode;
     }
 };
+
+// Initialize static variable for Course class
+int Course::totalCourses = 0;
 
 
 int main() {
@@ -158,6 +179,10 @@ int main() {
 
     // Display course information
     courses[0]->displayInfo();
+
+    // Display total students and total courses
+    cout << "Total number of students: " << Student::getTotalStudents() << endl;
+    cout << "Total number of courses: " << Course::getTotalCourses() << endl;
 
     // Deallocate memory
     for (int i = 0; i < studentCount; i++) {
