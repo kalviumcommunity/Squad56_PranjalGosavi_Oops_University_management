@@ -30,6 +30,32 @@ public:
         totalStudents--;  // Decrement total students count
     }
 
+    // Mutator (Setter) Methods
+    void setName(const string& name) {
+        this->name = name;
+    }
+
+    void setAge(int age) {
+        this->age = age;
+    }
+
+    void setStudentID(const string& studentID) {
+        this->studentID = studentID;
+    }
+
+    // Accessor (Getter) Methods
+    string getName() const {
+        return name;
+    }
+
+    int getAge() const {
+        return age;
+    }
+
+    string getStudentID() const {
+        return studentID;
+    }
+
     // Function to enroll in a course
     void enrollCourse(const string& course) {
         if (courseCount < MAX_COURSES) {
@@ -53,10 +79,6 @@ public:
 
     static int getTotalStudents() {  // Static function to return total students
         return totalStudents;
-    }
-
-    string getStudentID() const {
-        return studentID;
     }
 };
 
@@ -85,7 +107,24 @@ public:
         totalCourses--;  
     }
 
-   
+    // Mutator (Setter) Methods
+    void setCourseName(const string& courseName) {
+        this->courseName = courseName;
+    }
+
+    void setCourseCode(const string& courseCode) {
+        this->courseCode = courseCode;
+    }
+
+    // Accessor (Getter) Methods
+    string getCourseName() const {
+        return courseName;
+    }
+
+    string getCourseCode() const {
+        return courseCode;
+    }
+
     void addStudent(const string& studentID) {
         if (studentCount < MAX_STUDENTS) {
             enrolledStudents[studentCount] = studentID;
@@ -95,7 +134,6 @@ public:
         }
     }
 
-    
     void displayInfo() const {
         cout << "Course Name: " << courseName << ", Course Code: " << courseCode << endl;
         cout << "Enrolled Students: ";
@@ -105,22 +143,12 @@ public:
         cout << endl;
     }
 
-
-
     static int getTotalCourses() {  // Static function to return total courses
         return totalCourses;
     }
-
-
-
-    string getCourseCode() const {
-        return courseCode;
-    }
 };
 
-
 int Course::totalCourses = 0;
-
 
 int main() {
     // Dynamically allocate arrays of Student and Course objects
@@ -130,7 +158,7 @@ int main() {
     int studentCount = 0;  
     int courseCount = 0;   
 
- 
+    // Input for Student
     string studentName, studentID;
     int studentAge, numCourses;
     cout << "Enter student name: ";
@@ -141,7 +169,11 @@ int main() {
     cin >> studentID;
     cin.ignore(); 
 
-    students[studentCount++] = new Student(studentName, studentAge, studentID);
+    students[studentCount] = new Student();
+    students[studentCount]->setName(studentName);
+    students[studentCount]->setAge(studentAge);
+    students[studentCount]->setStudentID(studentID);
+    studentCount++;
 
     cout << "Enter number of courses to enroll: ";
     cin >> numCourses;
@@ -155,7 +187,7 @@ int main() {
 
     students[0]->displayInfo();
 
-   
+    // Input for Course
     string courseName, courseCode;
     int numStudents;
     cout << "Enter course name: ";
@@ -164,7 +196,10 @@ int main() {
     cin >> courseCode;
     cin.ignore(); 
 
-    courses[courseCount++] = new Course(courseName, courseCode);
+    courses[courseCount] = new Course();
+    courses[courseCount]->setCourseName(courseName);
+    courses[courseCount]->setCourseCode(courseCode);
+    courseCount++;
 
     cout << "Enter number of students to add to the course: ";
     cin >> numStudents;
@@ -176,14 +211,12 @@ int main() {
         courses[0]->addStudent(studentID);
     }
 
-    
     courses[0]->displayInfo();
 
-    
     cout << "Total number of students: " << Student::getTotalStudents() << endl;
     cout << "Total number of courses: " << Course::getTotalCourses() << endl;
 
- 
+    // Cleanup dynamically allocated memory
     for (int i = 0; i < studentCount; i++) {
         delete students[i];
     }
