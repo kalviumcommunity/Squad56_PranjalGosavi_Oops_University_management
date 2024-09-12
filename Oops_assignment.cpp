@@ -8,6 +8,7 @@ const int MAX_STUDENTS = 10;
 
 // Class: Student
 class Student {
+    // private access specifier 
 private:
     string name;
     int age;
@@ -16,6 +17,8 @@ private:
     int courseCount;
     static int totalStudents;  // Static variable to count total students
 
+    
+    // public access specifier
 public:
     // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
@@ -88,6 +91,7 @@ int Student::totalStudents = 0;
 
 // Class: Course
 class Course {
+     // private access specifier
 private:
     string courseName;
     string courseCode;
@@ -95,6 +99,7 @@ private:
     int studentCount;
     static int totalCourses;  
 
+    // public access specifier
 public:
     Course(const string& courseName = "", const string& courseCode = "")
         : courseName(courseName), courseCode(courseCode), studentCount(0) {
