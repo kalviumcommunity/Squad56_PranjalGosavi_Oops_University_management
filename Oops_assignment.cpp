@@ -30,7 +30,7 @@ public:
     // Destructor to free allocated memory
     ~Student() {
         delete[] enrolledCourses;  
-        totalStudents--;  // Decrement total students count
+        totalStudents--; 
     }
 
     // Mutator (Setter) Methods
@@ -99,14 +99,16 @@ private:
     int studentCount;
     static int totalCourses;  
 
-    // public access specifier
+    
 public:
+    // Constructor
     Course(const string& courseName = "", const string& courseCode = "")
         : courseName(courseName), courseCode(courseCode), studentCount(0) {
         enrolledStudents = new string[MAX_STUDENTS]; 
         totalCourses++;  
     }
-
+    
+    // Destructor
     ~Course() {
         delete[] enrolledStudents;  
         totalCourses--;  
@@ -148,7 +150,7 @@ public:
         cout << endl;
     }
 
-    static int getTotalCourses() {  // Static function to return total courses
+    static int getTotalCourses() {
         return totalCourses;
     }
 };
