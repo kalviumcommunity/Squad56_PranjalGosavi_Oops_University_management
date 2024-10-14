@@ -8,13 +8,19 @@ const int MAX_STUDENTS = 10;
 
 // Class: Person (Base class)
 class Person {
-protected:  // protected access to be accessible in derived classes
+protected:
     string name;
     int age;
 
 public:
-    // Constructor
-    Person(const string& name = "", int age = 0) : name(name), age(age) {}
+    // Default constructor
+    Person() : name("Unknown"), age(0) {}
+
+    // Constructor with only name
+    Person(const string& name) : name(name), age(0) {}
+
+    // Constructor with name and age
+    Person(const string& name, int age) : name(name), age(age) {}
 
     // Accessor (Getter) Methods
     string getName() const {
@@ -35,35 +41,31 @@ public:
 class Student : public Person {
 private:
     string studentID;
-    string* enrolledCourses;  
+    string* enrolledCourses;
     int courseCount;
-    static int totalStudents; 
+    static int totalStudents;
 
 public:
     // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
         : Person(name, age), studentID(studentID), courseCount(0) {
-        enrolledCourses = new string[MAX_COURSES];  
-        totalStudents++;  // Increment total students count
+        enrolledCourses = new string[MAX_COURSES];
+        totalStudents++;
     }
 
-    // Destructor to free allocated memory
     ~Student() {
-        delete[] enrolledCourses;  
-        totalStudents--; 
+        delete[] enrolledCourses;
+        totalStudents--;
     }
 
-    // Mutator (Setter) Methods
     void setStudentID(const string& studentID) {
         this->studentID = studentID;
     }
 
-    // Accessor (Getter) Methods
     string getStudentID() const {
         return studentID;
     }
 
-    // Function to enroll in a course
     void enrollCourse(const string& course) {
         if (courseCount < MAX_COURSES) {
             enrolledCourses[courseCount] = course;
@@ -73,7 +75,6 @@ public:
         }
     }
 
-    // Overriding displayInfo from Person class
     void displayInfo() const override {
         Person::displayInfo();
         cout << "Student ID: " << studentID << endl;
@@ -84,7 +85,7 @@ public:
         cout << endl;
     }
 
-    static int getTotalStudents() {  // Static function to return total students
+    static int getTotalStudents() {
         return totalStudents;
     }
 };
@@ -108,7 +109,6 @@ public:
         return thesisTitle;
     }
 
-    // Overriding displayInfo to show thesis title
     void displayInfo() const override {
         Student::displayInfo();
         cout << "Thesis Title: " << thesisTitle << endl;
@@ -120,25 +120,22 @@ class Course {
 private:
     string courseName;
     string courseCode;
-    string* enrolledStudents;  
+    string* enrolledStudents;
     int studentCount;
-    static int totalCourses;  
+    static int totalCourses;
 
 public:
-    // Constructor
     Course(const string& courseName = "", const string& courseCode = "")
         : courseName(courseName), courseCode(courseCode), studentCount(0) {
-        enrolledStudents = new string[MAX_STUDENTS]; 
-        totalCourses++;  
-    }
-    
-    // Destructor
-    ~Course() {
-        delete[] enrolledStudents;  
-        totalCourses--;  
+        enrolledStudents = new string[MAX_STUDENTS];
+        totalCourses++;
     }
 
-    // Mutator (Setter) Methods
+    ~Course() {
+        delete[] enrolledStudents;
+        totalCourses--;
+    }
+
     void setCourseName(const string& courseName) {
         this->courseName = courseName;
     }
@@ -147,7 +144,6 @@ public:
         this->courseCode = courseCode;
     }
 
-    // Accessor (Getter) Methods
     string getCourseName() const {
         return courseName;
     }
@@ -190,7 +186,6 @@ public:
     Instructor(const string& name = "", int age = 0, const string& courseName = "", const string& courseCode = "", const string& instructorID = "")
         : Person(name, age), Course(courseName, courseCode), instructorID(instructorID) {}
 
-    // Overriding displayInfo to include instructor's course and ID
     void displayInfo() const override {
         Person::displayInfo();
         cout << "Instructor ID: " << instructorID << endl;
@@ -199,6 +194,16 @@ public:
 };
 
 int main() {
+    // Example using constructor overloading for Person
+    Person person1;
+    Person person2("Bob");
+    Person person3("Alice", 30);
+
+    // Display information using the overloaded constructors
+    person1.displayInfo();
+    person2.displayInfo();
+    person3.displayInfo();
+
     // Example of Student and GraduateStudent (Single Inheritance)
     GraduateStudent gradStudent("Alice", 25, "S12345", "AI and Machine Learning");
     gradStudent.enrollCourse("Data Structures");
