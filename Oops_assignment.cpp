@@ -6,23 +6,43 @@ using namespace std;
 const int MAX_COURSES = 10;
 const int MAX_STUDENTS = 10;
 
-// Class: Student
-class Student {
-    // private access specifier 
-private:
+// Class: Person (Base class)
+class Person {
+protected:  // protected access to be accessible in derived classes
     string name;
     int age;
+
+public:
+    // Constructor
+    Person(const string& name = "", int age = 0) : name(name), age(age) {}
+
+    // Accessor (Getter) Methods
+    string getName() const {
+        return name;
+    }
+
+    int getAge() const {
+        return age;
+    }
+
+    // Virtual function to display info
+    virtual void displayInfo() const {
+        cout << "Name: " << name << ", Age: " << age << endl;
+    }
+};
+
+// Class: Student (Derived from Person)
+class Student : public Person {
+private:
     string studentID;
     string* enrolledCourses;  
     int courseCount;
-    static int totalStudents;  // Static variable to count total students
+    static int totalStudents; 
 
-    
-    // public access specifier
 public:
     // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
-        : name(name), age(age), studentID(studentID), courseCount(0) {
+        : Person(name, age), studentID(studentID), courseCount(0) {
         enrolledCourses = new string[MAX_COURSES];  
         totalStudents++;  // Increment total students count
     }
@@ -34,27 +54,11 @@ public:
     }
 
     // Mutator (Setter) Methods
-    void setName(const string& name) {
-        this->name = name;
-    }
-
-    void setAge(int age) {
-        this->age = age;
-    }
-
     void setStudentID(const string& studentID) {
         this->studentID = studentID;
     }
 
     // Accessor (Getter) Methods
-    string getName() const {
-        return name;
-    }
-
-    int getAge() const {
-        return age;
-    }
-
     string getStudentID() const {
         return studentID;
     }
@@ -69,10 +73,10 @@ public:
         }
     }
 
-    // Function to display student information
-    void displayInfo() const {
-        cout << "Student Name: " << name << ", Age: " << age
-             << ", Student ID: " << studentID << endl;
+    // Overriding displayInfo from Person class
+    void displayInfo() const override {
+        Person::displayInfo();
+        cout << "Student ID: " << studentID << endl;
         cout << "Enrolled Courses: ";
         for (int i = 0; i < courseCount; i++) {
             cout << enrolledCourses[i] << " ";
@@ -85,13 +89,34 @@ public:
     }
 };
 
-// Initialize static variable for Student class
 int Student::totalStudents = 0;
 
+// Class: GraduateStudent (Derived from Student, Single Inheritance)
+class GraduateStudent : public Student {
+private:
+    string thesisTitle;
+
+public:
+    GraduateStudent(const string& name = "", int age = 0, const string& studentID = "", const string& thesisTitle = "")
+        : Student(name, age, studentID), thesisTitle(thesisTitle) {}
+
+    void setThesisTitle(const string& thesisTitle) {
+        this->thesisTitle = thesisTitle;
+    }
+
+    string getThesisTitle() const {
+        return thesisTitle;
+    }
+
+    // Overriding displayInfo to show thesis title
+    void displayInfo() const override {
+        Student::displayInfo();
+        cout << "Thesis Title: " << thesisTitle << endl;
+    }
+};
 
 // Class: Course
 class Course {
-     // private access specifier
 private:
     string courseName;
     string courseCode;
@@ -99,7 +124,6 @@ private:
     int studentCount;
     static int totalCourses;  
 
-    
 public:
     // Constructor
     Course(const string& courseName = "", const string& courseCode = "")
@@ -157,80 +181,38 @@ public:
 
 int Course::totalCourses = 0;
 
+// Class: Instructor (Derived from both Person and Course - Multiple Inheritance)
+class Instructor : public Person, public Course {
+private:
+    string instructorID;
+
+public:
+    Instructor(const string& name = "", int age = 0, const string& courseName = "", const string& courseCode = "", const string& instructorID = "")
+        : Person(name, age), Course(courseName, courseCode), instructorID(instructorID) {}
+
+    // Overriding displayInfo to include instructor's course and ID
+    void displayInfo() const override {
+        Person::displayInfo();
+        cout << "Instructor ID: " << instructorID << endl;
+        Course::displayInfo();
+    }
+};
+
 int main() {
-    // Dynamically allocate arrays of Student and Course objects
-    Student* students[MAX_STUDENTS];
-    Course* courses[MAX_COURSES];
+    // Example of Student and GraduateStudent (Single Inheritance)
+    GraduateStudent gradStudent("Alice", 25, "S12345", "AI and Machine Learning");
+    gradStudent.enrollCourse("Data Structures");
+    gradStudent.enrollCourse("Algorithms");
+    gradStudent.displayInfo();
 
-    int studentCount = 0;  
-    int courseCount = 0;   
-
-    // Input for Student
-    string studentName, studentID;
-    int studentAge, numCourses;
-    cout << "Enter student name: ";
-    getline(cin, studentName);
-    cout << "Enter student age: ";
-    cin >> studentAge;
-    cout << "Enter student ID: ";
-    cin >> studentID;
-    cin.ignore(); 
-
-    students[studentCount] = new Student();
-    students[studentCount]->setName(studentName);
-    students[studentCount]->setAge(studentAge);
-    students[studentCount]->setStudentID(studentID);
-    studentCount++;
-
-    cout << "Enter number of courses to enroll: ";
-    cin >> numCourses;
-    cin.ignore();
-    for (int i = 0; i < numCourses && i < MAX_COURSES; i++) {
-        string course;
-        cout << "Enter course " << i + 1 << ": ";
-        getline(cin, course);
-        students[0]->enrollCourse(course);
-    }
-
-    students[0]->displayInfo();
-
-    // Input for Course
-    string courseName, courseCode;
-    int numStudents;
-    cout << "Enter course name: ";
-    getline(cin, courseName);
-    cout << "Enter course code: ";
-    cin >> courseCode;
-    cin.ignore(); 
-
-    courses[courseCount] = new Course();
-    courses[courseCount]->setCourseName(courseName);
-    courses[courseCount]->setCourseCode(courseCode);
-    courseCount++;
-
-    cout << "Enter number of students to add to the course: ";
-    cin >> numStudents;
-    cin.ignore(); 
-    for (int i = 0; i < numStudents && i < MAX_STUDENTS; i++) {
-        string studentID;
-        cout << "Enter student ID " << i + 1 << ": ";
-        getline(cin, studentID);
-        courses[0]->addStudent(studentID);
-    }
-
-    courses[0]->displayInfo();
+    // Example of Instructor (Multiple Inheritance)
+    Instructor instructor("Dr. John", 45, "Computer Science", "CS101", "I98765");
+    instructor.addStudent("S12345");
+    instructor.addStudent("S67890");
+    instructor.displayInfo();
 
     cout << "Total number of students: " << Student::getTotalStudents() << endl;
     cout << "Total number of courses: " << Course::getTotalCourses() << endl;
-
-    // Cleanup dynamically allocated memory
-    for (int i = 0; i < studentCount; i++) {
-        delete students[i];
-    }
-
-    for (int i = 0; i < courseCount; i++) {
-        delete courses[i];
-    }
 
     return 0;
 }
