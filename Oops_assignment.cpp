@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -26,42 +27,52 @@ public:
     virtual ~Person() {}
 };
 
+// Class: CourseManager (Handles course enrollment)
+class CourseManager {
+private:
+    vector<string> enrolledCourses;
+
+public:
+    // Enroll in a course
+    void enrollCourse(const string& course) {
+        if (enrolledCourses.size() < MAX_COURSES) {
+            enrolledCourses.push_back(course);
+        } else {
+            cout << "Cannot enroll in more courses. Maximum limit reached." << endl;
+        }
+    }
+
+    // Display enrolled courses
+    void displayCourses() const {
+        cout << "Enrolled Courses: ";
+        for (const auto& course : enrolledCourses) {
+            cout << course << " ";
+        }
+        cout << endl;
+    }
+};
+
 // Class: Student (Derived from Person)
 class Student : public Person {
 private:
     string studentID;
-    string* enrolledCourses;
-    int courseCount;
+    CourseManager courseManager;  // Uses CourseManager for course handling
 
 public:
     // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
-        : Person(name, age), studentID(studentID), courseCount(0) {
-        enrolledCourses = new string[MAX_COURSES];
-    }
+        : Person(name, age), studentID(studentID) {}
 
-    ~Student() {
-        delete[] enrolledCourses;
-    }
-
+    // Enroll in a course via CourseManager
     void enrollCourse(const string& course) {
-        if (courseCount < MAX_COURSES) {
-            enrolledCourses[courseCount] = course;
-            courseCount++;
-        } else {
-            cout << "Cannot enroll in more courses. Maximum limit reached." << endl;
-        }
+        courseManager.enrollCourse(course);
     }
 
     // Override the pure virtual function in Person
     void displayInfo() const override {
         cout << "Student Name: " << name << ", Age: " << age << endl;
         cout << "Student ID: " << studentID << endl;
-        cout << "Enrolled Courses: ";
-        for (int i = 0; i < courseCount; i++) {
-            cout << enrolledCourses[i] << " ";
-        }
-        cout << endl;
+        courseManager.displayCourses();  // Display courses via CourseManager
     }
 };
 
@@ -83,9 +94,6 @@ public:
 };
 
 int main() {
-    // Abstract class cannot be instantiated directly
-    // Person p1; // This will cause an error
-
     // Example of Student (Derived from Person)
     Student student1("Alice", 20, "S12345");
     student1.enrollCourse("Data Structures");
