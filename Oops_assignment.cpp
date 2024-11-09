@@ -14,27 +14,58 @@ protected:
     int age;
 
 public:
-    // Default constructor
     Person() : name("Unknown"), age(0) {}
-
-    // Constructor with name and age
     Person(const string& name, int age) : name(name), age(age) {}
-
-    // Pure virtual function to enforce derived classes to implement it
     virtual void displayInfo() const = 0;  // Abstract method
-
-    // Destructor should be virtual in a base class
     virtual ~Person() {}
 };
 
-// Class: CourseManager (Handles course enrollment)
-class CourseManager {
+// Abstract Class: CourseType (Base class for various course types)
+class CourseType {
+public:
+    virtual string getCourseInfo() const = 0;  // Pure virtual function
+    virtual ~CourseType() {}
+};
+
+// Derived Course Type: Regular Course
+class RegularCourse : public CourseType {
 private:
-    vector<string> enrolledCourses;
+    string courseName;
 
 public:
-    // Enroll in a course
-    void enrollCourse(const string& course) {
+    RegularCourse(const string& name) : courseName(name) {}
+    string getCourseInfo() const override {
+        return "Regular Course: " + courseName;
+    }
+};
+
+// Derived Course Type: Online Course
+class OnlineCourse : public CourseType {
+private:
+    string courseName;
+
+public:
+    OnlineCourse(const string& name) : courseName(name) {}
+    string getCourseInfo() const override {
+        return "Online Course: " + courseName;
+    }
+};
+
+// Interface for Course Management
+class CourseManagerInterface {
+public:
+    virtual void enrollCourse(CourseType* course) = 0;
+    virtual void displayCourses() const = 0;
+    virtual ~CourseManagerInterface() {}
+};
+
+// Class: CourseManager (Handles course enrollment)
+class CourseManager : public CourseManagerInterface {
+private:
+    vector<CourseType*> enrolledCourses;
+
+public:
+    void enrollCourse(CourseType* course) override {
         if (enrolledCourses.size() < MAX_COURSES) {
             enrolledCourses.push_back(course);
         } else {
@@ -42,13 +73,18 @@ public:
         }
     }
 
-    // Display enrolled courses
-    void displayCourses() const {
+    void displayCourses() const override {
         cout << "Enrolled Courses: ";
         for (const auto& course : enrolledCourses) {
-            cout << course << " ";
+            cout << course->getCourseInfo() << " ";
         }
         cout << endl;
+    }
+
+    ~CourseManager() {
+        for (auto course : enrolledCourses) {
+            delete course;
+        }
     }
 };
 
@@ -56,23 +92,24 @@ public:
 class Student : public Person {
 private:
     string studentID;
-    CourseManager courseManager;  // Uses CourseManager for course handling
+    CourseManagerInterface* courseManager;
 
 public:
-    // Constructor
     Student(const string& name = "", int age = 0, const string& studentID = "")
-        : Person(name, age), studentID(studentID) {}
+        : Person(name, age), studentID(studentID), courseManager(new CourseManager) {}
 
-    // Enroll in a course via CourseManager
-    void enrollCourse(const string& course) {
-        courseManager.enrollCourse(course);
+    void enrollCourse(CourseType* course) {
+        courseManager->enrollCourse(course);
     }
 
-    // Override the pure virtual function in Person
     void displayInfo() const override {
         cout << "Student Name: " << name << ", Age: " << age << endl;
         cout << "Student ID: " << studentID << endl;
-        courseManager.displayCourses();  // Display courses via CourseManager
+        courseManager->displayCourses();
+    }
+
+    ~Student() {
+        delete courseManager;
     }
 };
 
@@ -82,11 +119,9 @@ private:
     string instructorID;
 
 public:
-    // Constructor
     Instructor(const string& name = "", int age = 0, const string& instructorID = "")
         : Person(name, age), instructorID(instructorID) {}
 
-    // Override the pure virtual function in Person
     void displayInfo() const override {
         cout << "Instructor Name: " << name << ", Age: " << age << endl;
         cout << "Instructor ID: " << instructorID << endl;
@@ -94,15 +129,13 @@ public:
 };
 
 int main() {
-    // Example of Student (Derived from Person)
     Student student1("Alice", 20, "S12345");
-    student1.enrollCourse("Data Structures");
-    student1.enrollCourse("Algorithms");
-    student1.displayInfo();  // Calls the overridden displayInfo method in Student
+    student1.enrollCourse(new RegularCourse("Data Structures"));
+    student1.enrollCourse(new OnlineCourse("Algorithms"));
+    student1.displayInfo();
 
-    // Example of Instructor (Derived from Person)
     Instructor instructor1("Dr. John", 45, "I98765");
-    instructor1.displayInfo();  // Calls the overridden displayInfo method in Instructor
+    instructor1.displayInfo();
 
     return 0;
 }
