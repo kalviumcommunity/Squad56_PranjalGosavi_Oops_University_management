@@ -5,26 +5,19 @@
 using namespace std;
 
 const int MAX_COURSES = 10;
-const int MAX_STUDENTS = 10;
 
-// Abstract Class: Person (Base class)
+// Interface: Person
 class Person {
-protected:
-    string name;
-    int age;
-
 public:
-    Person() : name("Unknown"), age(0) {}
-    Person(const string& name, int age) : name(name), age(age) {}
-    virtual void displayInfo() const = 0;  // Abstract method
-    virtual ~Person() {}
+    virtual void displayInfo() const = 0;  // Pure virtual method for displaying information
+    virtual ~Person() = default;
 };
 
-// Abstract Class: CourseType (Base class for various course types)
+// Abstract Class: CourseType
 class CourseType {
 public:
     virtual string getCourseInfo() const = 0;  // Pure virtual function
-    virtual ~CourseType() {}
+    virtual ~CourseType() = default;
 };
 
 // Derived Course Type: Regular Course
@@ -56,7 +49,7 @@ class CourseManagerInterface {
 public:
     virtual void enrollCourse(CourseType* course) = 0;
     virtual void displayCourses() const = 0;
-    virtual ~CourseManagerInterface() {}
+    virtual ~CourseManagerInterface() = default;
 };
 
 // Class: CourseManager (Handles course enrollment)
@@ -88,39 +81,39 @@ public:
     }
 };
 
-// Class: Student (Derived from Person)
+// Class: Student (Implements Person, uses CourseManager for course management)
 class Student : public Person {
 private:
+    string name;
+    int age;
     string studentID;
-    CourseManagerInterface* courseManager;
+    CourseManager courseManager;
 
 public:
-    Student(const string& name = "", int age = 0, const string& studentID = "")
-        : Person(name, age), studentID(studentID), courseManager(new CourseManager) {}
+    Student(const string& name, int age, const string& studentID)
+        : name(name), age(age), studentID(studentID) {}
 
     void enrollCourse(CourseType* course) {
-        courseManager->enrollCourse(course);
+        courseManager.enrollCourse(course);
     }
 
     void displayInfo() const override {
         cout << "Student Name: " << name << ", Age: " << age << endl;
         cout << "Student ID: " << studentID << endl;
-        courseManager->displayCourses();
-    }
-
-    ~Student() {
-        delete courseManager;
+        courseManager.displayCourses();
     }
 };
 
-// Class: Instructor (Derived from Person)
+// Class: Instructor (Implements Person, does not use CourseManager)
 class Instructor : public Person {
 private:
+    string name;
+    int age;
     string instructorID;
 
 public:
-    Instructor(const string& name = "", int age = 0, const string& instructorID = "")
-        : Person(name, age), instructorID(instructorID) {}
+    Instructor(const string& name, int age, const string& instructorID)
+        : name(name), age(age), instructorID(instructorID) {}
 
     void displayInfo() const override {
         cout << "Instructor Name: " << name << ", Age: " << age << endl;
@@ -129,13 +122,15 @@ public:
 };
 
 int main() {
-    Student student1("Alice", 20, "S12345");
-    student1.enrollCourse(new RegularCourse("Data Structures"));
-    student1.enrollCourse(new OnlineCourse("Algorithms"));
-    student1.displayInfo();
+    // Using Student class as an instance of Person (Liskov Substitution Principle)
+    Person* person1 = new Student("Alice", 20, "S12345");
+    person1->displayInfo();
+    delete person1;
 
-    Instructor instructor1("Dr. John", 45, "I98765");
-    instructor1.displayInfo();
+    // Using Instructor class as an instance of Person (Liskov Substitution Principle)
+    Person* person2 = new Instructor("Dr. John", 45, "I98765");
+    person2->displayInfo();
+    delete person2;
 
     return 0;
 }
